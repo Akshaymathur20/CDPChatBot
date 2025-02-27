@@ -1,20 +1,22 @@
- import express from 'express'
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import chatbotRoutes from './src/routes/chatbotRoutes.js'; // ✅ Ensure .js is included
+import { EventEmitter } from 'events';
 
- const app = express();
+EventEmitter.defaultMaxListeners = 20;
 
-app.get('/', (req, res) => {
-  res.send('Project Is Ready To Start')
-})
+dotenv.config();
 
-//getting apis
-app.get('/chatbot', (req, res) => {
-  res.send('Hear we take the answer that we fetch from the apis and how questions')
-  
-})
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-const PORT= process.env.PORT||3000;
+// Use chatbot routes
+app.use("/api/chatbot", chatbotRoutes);
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on http://localhost:${PORT}`);
-    
-})
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+});
